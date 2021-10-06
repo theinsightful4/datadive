@@ -1,0 +1,279 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+  <meta charset="utf-8">
+  <title>DataDive</title>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
+  <link rel="stylesheet" href="{% static 'css/fonts.css' %}" type="text/css">   
+  <link rel="stylesheet" href="{% static 'css/material-overrides.css' %}" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500|Material+Icons" rel="stylesheet" type="text/css">
+  
+
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <em><h1 class="l--page">Passion provides purpose,<br> but  <b>data</b> <span class="optional">Right Here </span> drives decisions</h1></em>
+  </header>
+
+  <!-- Top Controls -->
+  <div id="top-controls">
+    <div class="container l--page">
+      <div class="timeline-controls">
+        
+      </div>
+      <div class="control">
+        <label for="algo">Algorithm</label>
+        <div class="select">
+          <select id="algo">
+            <option value="0.001">SVM</option>
+            <option value="0.01">Linear</option>
+            <option value="0.1">Logistic</option>
+          </select>
+      </div>
+      </div>
+      <div class="control">
+        <label for="graph">Graph</label>
+        <div class="select">
+          <select id="graph">
+            <option value="scatter">Scatter</option>
+            <option value="line">Line</option>
+            <option value="heat">Heat</option>
+            <!--<option value="linear">Linear</option>-->
+          </select>
+      </div>
+      </div>
+      <div class="control ui-problem">
+        <label for="problem">Problem type</label>
+        <div class="select">
+          <select id="problem">
+            <option value="classification">Classification</option>
+            <option value="regression">Regression</option>
+          </select>
+        </div>
+    </div>
+  </div>
+
+
+  <!-- Main Part -->
+  <div id="main-part" class="l--page">
+
+    <!--  Data Column-->
+
+    <div class="column data">
+      <h4>Data</h4>
+      <p>Choose a dataset to try to classify:</p>
+      <div class="dataset-list"> <!--thumbnails for datasets -->
+        <div class="dataset" title="Circle">
+          <canvas class="data-thumbnail" data-dataset="circle" id="canvasCircle" value="circle" onclick="myFunction()"></canvas>
+          <div class="label">circle</div>
+        </div>
+        <div class="dataset" title="Exclusive or">
+          <canvas class="data-thumbnail" data-dataset="xor" id="canvasExclusive" value="exclusive"></canvas>
+          <div class="label">exclusive</div>
+        </div>
+        <div class="dataset" title="Gaussian">
+          <canvas class="data-thumbnail" data-dataset="gauss" id="canvasGaussian" value="gaussian"></canvas>
+          <div class="label">gaussian</div>
+        </div>
+        <div class="dataset" title="Spiral">
+          <canvas class="data-thumbnail" data-dataset="spiral" id="canvasSpiral" value="spiral"></canvas>
+          <div class="label">spiral</div>
+        </div>
+      </div>
+      <div>
+        <label for="percTrainData">Ratio of training to test data:&nbsp;&nbsp;<span class="value">XX</span>%</label>
+        <p class="slider">
+        <input class="mdl-slider mdl-js-slider" type="range" id="percTrainData" min="10" max="90" step="10">
+        </p>
+
+        <label for="noise">Noise:&nbsp;&nbsp;<span class="value">XX</span></label>
+        <p class="slider">
+        <input class="mdl-slider mdl-js-slider" type="range" id="noise" min="0" max="50" step="5">
+        </p>
+
+        <label for="batchSize">Batch size:&nbsp;&nbsp;<span class="value">XX</span></label>
+        <p class="slider">
+        <input class="mdl-slider mdl-js-slider" type="range" id="batchSize" min="1" max="30" step="1">
+        </p>
+      </div>
+    </div>
+ 
+<img src="data:image/png;base64,{{ gaussian }}" alt="" style="position: relative; top: -30px" hspace="75">
+
+
+    <!-- Features Column -->
+    <div class="column features">
+      <!--<h4>Input Layer</h4>
+      <p>The properties of the data to use in the network.</p>-->
+      <div id="network">
+        <!--<svg id="network-svg"></svg> between space most imp output train accu and test accu check boxes -->
+        <div class="callout thumbnail">
+          
+        </div>
+        
+      </div>
+
+      <!-- graph space -->
+      <div class="graph-section">
+        <h4>
+          <span id="num-layers"></span>
+          <span id="layers-label"></span>
+        </h4>
+        <div class="bracket"></div>
+      </div>
+
+    </div>
+
+    <!-- Output Column -->
+    <div class="column output">
+      <h4>Output</h4>
+      <div class="output-stats train">
+        <div class="value" id="accuracy-train"></div>
+        <p>Training accuracy</p>
+      </div>
+      <div class="output-stats">
+        <div class="value" id="accuracy-test"></div>
+        <p>Test accuracy</p>
+      </div>
+      <div id="heatmap">  parameter adjustment panel.. </div>
+      <div style="float:left;margin-top:20px">
+        <div style="display:flex; align-items:center;"></div>
+        <br/>
+        <div style="display:flex;">
+          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for"show-test-data">
+            <input type="checkbox" id="show-test-data" class="mdl-checkbox__input" checked>
+            <span class="mdl-checkbox__label label">Show test data</span>
+          </label>
+          <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for"discretize">
+            <input type="checkbox" id="discretize" class="mdl-checkbox__input" checked>
+            <span class="mdl-checkbox__label label">Discretize output</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="tutorial"></div>
+
+  <!-- Article -->
+
+  <article>
+    <div class="l--body">
+      <h2>Um, info about project</h2>
+      <p>In this Web based project (1st Phase) we are performing Data Visualization over a DataSet. Different resources as such Statiscal approaches, supervised machine learning and python are used to transform and work over the data to get a specified result. The resulting visual representation of data makes it easier to identify and share real-time trends, outliers, and new insights about the information represented in the data. 
+</p>
+    </div>
+    <div class="l--body">
+      <h2>How to use the site?</h2>
+      <p>In this Web project the a particular DataSet has been already provided for the user's ease. The only work of the user is to get different visual representation of data by playing with the given parameters.
+</p>
+    </div>
+    <div class="l--body">
+      <h2>What is data Visualisation?</h2>
+      <p>Data visualization is the graphical representation of information and data. By using visual elements like charts, graphs, and maps, data visualization tools helps us to see and understand trends, outliers, and patterns in data.
+It aids in analysis of massive amounts of information and to  make data-driven decisions.
+</p>
+    </div>
+    <div class="l--body">
+      <h2>Gains from good data visualization</h2>
+      <p>We can easily identify colours and patterns in our world. We can quickly identify red from blue, square from circle. Data visualization is another form of visual art that grabs our interest and keeps track of the message. When we see a chart, we quickly see trends and outliers. If we can see something, we internalize it quickly. 
+</p>
+    </div>
+    <div class="l--body">
+      <h2>What Library Are You Using?</h2>
+      <p><b>· NumPy</b> is the fundamental package for scientific computing in Python. It is a Python library that provides a multidimensional array object.<br>
+      <b>· Pandas</b> : The Pandas library is built on NumPy and provides easy-to-use data structures and data analysis tools for the Python programming language.<br>
+      <b>· Matplotlib</b> is an amazing visualization library in Python for 2D plots of arrays. Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python.<br>
+      <b>· Sklearn</b> : Scikit-learn is an open source machine learning library that supports supervised and unsupervised learning.<br>
+      <b>· Seaborn</b> : Seaborn is a Python data visualization library based on matplotlib. It provides a high-level interface for drawing attractive and informative statistical graphics.
+</p>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer>
+    <div>
+      <!--svg for datadive  class="l--body" -->
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><image xlink:href="data:;base64,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" width="120" height="35" /></svg>
+      
+
+      <div class="links">
+        <a href="">View on GitHub</a>
+        <a href="">Reference</a>
+      </div>
+    </div>
+  </footer>
+
+
+<script>
+var canvas1 = document.getElementById('canvasCircle'),
+context1 = canvas1.getContext('2d');
+
+
+var canvas2 = document.getElementById('canvasExclusive'),
+context2 = canvas2.getContext('2d');
+
+var canvas3 = document.getElementById('canvasGaussian'),
+context3 = canvas3.getContext('2d');
+
+var canvas4 = document.getElementById('canvasSpiral'),
+context4 = canvas4.getContext('2d');
+
+make_base1();
+make_base2();
+make_base3();
+make_base4();
+
+function make_base1()
+{
+  base_image1 = new Image();
+  base_image1.src = '{% static 'images/circle.png'%}';
+  base_image1.onload = function(){
+    context1.drawImage(base_image1, 0, 0, 300, 150);
+  }
+}
+
+function make_base2()
+{
+  base_image2 = new Image();
+  base_image2.src = '{% static 'images/exclusive.png'%}';
+  base_image2.onload = function(){
+    context2.drawImage(base_image2, 0, 0, 300, 150);
+  }
+}
+
+function make_base3()
+{
+  base_image3 = new Image();
+  base_image3.src = '{% static 'images/gaussian.png'%}';
+  base_image3.onload = function(){
+    context3.drawImage(base_image3, 0, 0, 300, 150);
+  }
+}
+
+function make_base4()
+{
+  base_image4 = new Image();
+  base_image4.src = '{% static 'images/spiral.png'%}';
+  base_image4.onload = function(){
+    context4.drawImage(base_image4, 0, 0, 300, 150);
+  }
+}
+
+
+function myFunction() {
+  location.replace("http://127.0.0.1:8000/result")
+}
+
+</script>
+</body>
+</html>
